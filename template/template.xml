@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="product_brand_shop" inherit_id="website_sale.products_attributes">
+        <xpath expr="//form[hasclass('js_attributes')]" position="inside">
+            <t t-if="brands">
+                <div class="product_brand_shop" style="border: 1px solid #ccc;">
+                    <div class="brand-title-shop">
+                        <strong>Brand</strong>
+                        <a href="javascript:void(0)" class="clear-brand-filter">(Clear all)</a>
+                    </div>
+                    <ul class="nav nav-pills nav-stacked type-radio nav-overflow-scroll">
+                        <t t-foreach="brands" t-as="brand">
+                            <li class="nav-stacked-li">
+                                <label class="check-box-label-brand">
+                                    <input class="check-box-input-brand" type="checkbox" name="brand-id"
+                                           t-att-value="'%s-%s' % (brand.name,brand.id)"
+                                           t-att-checked="'checked' if brand.id in brand_set else None"/>
+                                    <span class="check-box-name-brand" style="font-weight: normal"
+                                          t-field="brand.name"/>
+                                </label>
+                            </li>
+                        </t>
+                    </ul>
+                </div>
+            </t>
+        </xpath>
+    </template>
+    <template id="cleat_attrib_filter" inherit_id="website_sale.products_attributes">
+        <xpath expr="//strong[@t-field='a.name']" position="after">
+            <a href="javascript:void(0)" class="clear-attrib-filter">(Clear all)</a>
+        </xpath>
+    </template>
+
+    <!-- Snippet's Body -->
+    <template id="product_brand_snippet" name="Product's Brand Carousel">
+        <section class="s_brand_carousel mb8">
+            <div class="container">
+                <t t-call="website_product_brand.brand_slider_content"/>
+            </div>
+        </section>
+    </template>
+
+    <!-- Latest brands's Template -->
+    <template name="Brand Slider" id="brand_slider_content">
+        <div class="brand-title">
+            <h2>Our Brand</h2>
+        </div>
+        <t t-set="brands"
+           t-value="website.get_brand()"/>
+        <div class="owl-carousel as_our_brand" t-if="brands">
+            <t t-foreach="brands" t-as="brand">
+                <a t-att-href="'/shop?brand-id=%s-%s'% (brand.name,brand.id)">
+                    <div class="brand-img">
+                        <img t-att-src="website.image_url(brand,'brand_image')" t-att-title="brand.name"
+                             t-att-alt="brand.name" class="img img-responsive"/>
+                    </div>
+                </a>
+            </t>
+        </div>
+    </template>
+
+</odoo>
